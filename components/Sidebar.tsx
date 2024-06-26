@@ -72,7 +72,7 @@ const Sidebar = () => {
 								{/*
                                 - `text-lg`: Setzt die Textgröße auf groß.
                                 - `font-semibold`: Setzt die Schriftstärke auf halbfett.
-                                - `max-lg:hidden`: Versteckt den Text auf großen Bildschirmen.
+                                - `max-lg:hidden`: Versteckt den Text ab einer Breite kleiner als 1024px.
                                 */}
 								{item.label}
 							</p>
