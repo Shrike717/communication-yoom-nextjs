@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import MobileNav from './MobileNav';
+import { SignedIn, UserButton } from '@clerk/nextjs';
 
 const Navbar: React.FC = () => {
 	return (
@@ -41,6 +42,9 @@ const Navbar: React.FC = () => {
 				{/* flex-between: Selbst definiert in globals.css.
                     gap-5: Setzt einen Abstand von 5 Einheiten zwischen den Kindern. */}
 				{/* Clerk User Management */}
+				<SignedIn>
+					<UserButton />
+				</SignedIn>
 
 				<MobileNav />
 			</div>
