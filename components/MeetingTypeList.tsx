@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import HomeCard from './HomeCard';
+import MeetingModal from './MeetingModal';
 
 // Diese Komponente rendert eine Liste von Meeting-Typen, die der Benutzer erstellen oder beitreten kann.
 const MeetingTypeList = () => {
@@ -17,6 +18,9 @@ const MeetingTypeList = () => {
 		| 'isInstantMeeting'
 		| undefined
 	>();
+
+	// Diese Funktion wird aufgerufen, wenn der Benutzer auf den Button "Start Meeting" klickt.
+	const createMeeting = () => {};
 
 	return (
 		<section className='grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4'>
@@ -55,6 +59,16 @@ const MeetingTypeList = () => {
 				description='Meeting Recordings'
 				className='bg-yellow-1' // Fügt eine gelbe Hintergrundfarbe hinzu. Spezifische Farbe wird in CSS definiert.
 				handleClick={() => router.push('/recordings')} // Leitet den Benutzer zur Seite '/recordings' weiter.
+			/>
+
+			{/* Hier sitzt das wiederverwertbare Modal */}
+			<MeetingModal
+				isOpen={meetingState === 'isInstantMeeting'} // Öffnet das Modal, wenn der meetingState 'isInstantMeeting' ist. D.h. wenn der Benutzer auf das orangene Element "New Meeting" klickt.
+				onClose={() => setMeetingState(undefined)} // Schließt das Modal, wenn der Benutzer auf das Schließen-Symbol oder neben das Modal klickt.
+				title='Start an Instant Meeting' // Titel des Modals.
+				className='text-center' // Zentriert den Inhalt des Modals.
+				buttonText='Start Meeting' // Text des Buttons.
+				handleClick={createMeeting} // Funktion, die aufgerufen wird, wenn der Button geklickt wird.
 			/>
 		</section>
 	);
