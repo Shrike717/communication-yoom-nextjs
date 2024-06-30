@@ -1,22 +1,14 @@
-import { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from "react";
+import StreamVideoProvider from "@/providers/StreamClientProvider";
 
-const inter = Inter({ subsets: ['latin'] });
-
-export const metadata: Metadata = {
-	title: 'Create Next App',
-	description: 'Generate a new Next.js project in seconds.',
-};
-
+// Das ist das Unter-Layout für unserer Pages in der (root) Gruppe
 const RootLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
-	return (
-		<html lang='en'>
-			<body className={`${inter.className} bg-dark-2 text-white`}>
-				<main>{children}</main>;
-			</body>
-		</html>
-	);
+  return (
+    <main>
+      {/* Hier wrappen, wir unsere App in den VideoStreamProvider */}
+      <StreamVideoProvider>{children}</StreamVideoProvider>
+    </main>
+  );
 };
 
 export default RootLayout;
