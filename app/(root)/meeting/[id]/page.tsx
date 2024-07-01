@@ -17,7 +17,7 @@ const Meeting = ({ params }: { params: { id: string } }) => {
   // Zuerst brauchen wir unseren authentifizierten User. isLoaded zeigt an, ob der User bereits geladen wurde.
   const { user, isLoaded } = useUser();
   // Das tät brauchen wir, um tracken zu können ab der Audio und Video Setup des Fußes komplett ist oder nicht
-  const [isSetupComplete, setisSetupComplete] = useState(false);
+  const [isSetupComplete, setIsSetupComplete] = useState(false);
 
   // Hier holen wir uns den Call und den Ladezustand des Calls aus unserem custom Hook. Die ID wird aus den params geholt.
   const { call, isCallLoading } = useGetCallById(id);
@@ -32,7 +32,11 @@ const Meeting = ({ params }: { params: { id: string } }) => {
       <StreamCall call={call}>
         <StreamTheme>
           {/* Hier wollen wir nun zuerst wissen, ob der Audio und Video Setup des Zeus das schon komplettiert wurde oder nicht */}
-          {!isSetupComplete ? <MeetingSetup /> : <MeetingRoom />}
+          {!isSetupComplete ? (
+            <MeetingSetup setIsSetupComplete={setIsSetupComplete} /> // Wir geben den Setter als Prop an die MeetingSetup Komponente
+          ) : (
+            <MeetingRoom />
+          )}
         </StreamTheme>
       </StreamCall>
     </main>
