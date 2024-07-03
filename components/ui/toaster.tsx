@@ -17,7 +17,7 @@ export function Toaster() {
     <ToastProvider>
       {toasts.map(function ({ id, title, description, action, ...props }) {
         return (
-          // Wer ist Dahlen wir das 1000 mal direkt im Shadcn einen Code
+          // Hier stylen wir mal direkt im Shadcn Code
           <Toast
             className="border-none bg-dark-1 text-white"
             key={id}
