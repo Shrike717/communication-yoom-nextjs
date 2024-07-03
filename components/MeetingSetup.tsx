@@ -13,6 +13,7 @@ const MeetingSetup = ({
 }: {
   setIsSetupComplete: (value: boolean) => void;
 }) => {
+  // https://getstream.io/video/docs/react/ui-cookbook/replacing-call-controls/
   // Dieses State ist dafür da, um Zugriff auf die Kamera und das Mikrofon zu bekommen
   const [isMicCamToggledOn, setIsMicCamToggledOn] = useState(true);
 
