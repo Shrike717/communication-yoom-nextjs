@@ -6,6 +6,7 @@ import { ReactNode } from "react";
 import { Toaster } from "@/components/ui/toaster";
 
 import "@stream-io/video-react-sdk/dist/css/styles.css"; // Importiere die Video-React-SDK-Styles
+import "react-datepicker/dist/react-datepicker.css"; // Hier importieren wir die Styles des Datepickers.
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });

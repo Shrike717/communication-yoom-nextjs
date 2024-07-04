@@ -15,7 +15,7 @@ const MeetingSetup = ({
 }) => {
   // https://getstream.io/video/docs/react/ui-cookbook/replacing-call-controls/
   // Dieses State ist dafür da, um Zugriff auf die Kamera und das Mikrofon zu bekommen
-  const [isMicCamToggledOn, setIsMicCamToggledOn] = useState(true);
+  const [isMicCamToggledOn, setIsMicCamToggledOn] = useState(false);
 
   // Hier wird auf Den Call zugegriffen. Das funktioniert jetzt einfach, weil wir den Call in der StreamCall Komponente haben. Dort hatten wir ja diese Infos über den custom Hook geholt.
   // Und dieser Call ermöglicht uns Zugriff auf Mikrofon und Kamera
@@ -29,11 +29,11 @@ const MeetingSetup = ({
   useEffect(() => {
     // Hier toggeln wir das State
     if (isMicCamToggledOn) {
-      call.camera.disable();
-      call.microphone.disable();
-    } else {
       call.camera.enable();
       call.microphone.enable();
+    } else {
+      call.camera.disable();
+      call.microphone.disable();
     }
   }, [isMicCamToggledOn]);
 
@@ -50,7 +50,7 @@ const MeetingSetup = ({
             checked={isMicCamToggledOn}
             onChange={(e) => setIsMicCamToggledOn(e.target.checked)}
           />
-          Uncheck to enable cam and mic. Or join without
+          Check to enable cam and mic. Or join without
         </label>
         {/* Diese Komponente sollte die Einstellung für die Kamera und das Mikrofon anzeigen. */}
         <DeviceSettings />

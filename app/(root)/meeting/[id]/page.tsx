@@ -23,7 +23,7 @@ const Meeting = ({ params }: { params: { id: string } }) => {
   const { call, isCallLoading } = useGetCallById(id);
 
   // Wenn der Call noch geladen wird, wird ein Ladebildschirm angezeigt
-  if (!call || isCallLoading) return <Loader priority={true} />;
+  if (!call || isCallLoading) return <Loader />;
 
   return (
     <main className="h-screen w-full">

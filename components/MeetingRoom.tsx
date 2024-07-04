@@ -33,8 +33,6 @@ const MeetingRoom = () => {
   // Wenn es undefined ist: !undefined = true, !!undefined = false
   const isPeronalRoom = !!searchParams.get("personal");
 
-  console.log(isPeronalRoom);
-
   // Dieses State brauchen wir um die Layoutkomponente, die der User auswählt tracken zu können
   const [layout, setLayout] = useState<CallLayoutType>("speaker-left");
   // Dieses State brauchen wir um die Teilnehmerliste anzuzeigen oder nicht

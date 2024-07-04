@@ -7,6 +7,9 @@ import { useUser } from "@clerk/nextjs";
 import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
 
 import { useToast } from "@/components/ui/use-toast"; // Hier importieren wir den Toast-Hook.
+import { Textarea } from "./ui/textarea";
+
+import ReactDatePicker from "react-datepicker"; // Hier importieren wir den Datepicker.
 
 // Diese Komponente rendert eine Liste von Meeting-Typen, die der Benutzer erstellen oder beitreten kann.
 const MeetingTypeList = () => {
@@ -89,6 +92,9 @@ const MeetingTypeList = () => {
     }
   };
 
+  //  Hier holen wir uns den Meeting Link ür ein Scheduled Meeting aus dem Call Details, so dass er unten im Modal kopiert werden kann:
+  const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting${callDetails?.id} `; // Hier holen wir uns den Meeting-Link aus den Call-Details.
+
   return (
     <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
       {/*
@@ -129,6 +135,59 @@ const MeetingTypeList = () => {
       />
 
       {/* Hier sitzt das wiederverwertbare Modal */}
+      {/* Wir prüfen jetzt, ob es schon callDetails gibt. Nur wenn nicht, erstellen wir ein neues Meeting. */}
+      {!callDetails ? (
+        <MeetingModal
+          isOpen={meetingState === "isScheduleMeeting"} // Hier prüfen wir, ob der MeetingState auf "isScheduleMeeting" gesetzt ist.
+          onClose={() => setMeetingState(undefined)} // Hier setzen wir den MeetingState auf 'undefined', wenn das Modal geschlossen wird.
+          title="Create Meeting" // Hier setzen wir den Titel des Modals.
+          handleClick={createMeeting} // Hier setzen wir die Funktion, die aufgerufen wird, wenn der Button geklickt wird.
+        >
+          <div className="flex flex-col gap-2.5">
+            <label className="text-base font-normal leading-[22px] text-sky-2">
+              Add a description
+            </label>
+            <Textarea
+              // Die Fokus Regeln überschreiben die Standard Fokus Regeln von Tailwind. So bildet sich kein weißer and um das Feld
+              className="border-none bg-dark-3 focus-visible:ring-0 focus-visible:ring-offset-0"
+              onChange={(e) =>
+                setValues({ ...values, description: e.target.value })
+              }
+            />
+          </div>
+          {/* Kalender */}
+          <div className="flex w-full flex-col gap-2.5">
+            <label className="text-base font-normal leading-[22px] text-sky-2">
+              Select Date and Time
+            </label>
+            <ReactDatePicker
+              selected={values.dateTime} // Hier setzen wir das Datum und die Zeit des Meetings.
+              onChange={(date) => setValues({ ...values, dateTime: date! })} // Hier setzen wir die Funktion, die aufgerufen wird, wenn das Datum und die Zeit geändert werden.
+              showTimeSelect // Hier zeigen wir die Zeitauswahl an.
+              timeFormat="HH:mm" // Hier setzen wir das Zeitformat.
+              timeIntervals={15} // Hier setzen wir die Zeitintervalle auf 15 Minuten.
+              timeCaption="time" // Hier setzen wir die Beschriftung für die Zeit.
+              dateFormat="MMMM d, yyyy h:mm aa" // Hier setzen wir das Datumsformat.
+              className="w-full rounded bg-dark-3 p-2 focus:outline-none"
+            />
+          </div>
+        </MeetingModal>
+      ) : (
+        <MeetingModal
+          isOpen={meetingState === "isScheduleMeeting"} // Hier prüfen wir, ob der MeetingState auf "isInstantMeeting" gesetzt ist.
+          onClose={() => setMeetingState(undefined)} // Hier setzen wir den MeetingState auf 'undefined', wenn das Modal geschlossen wird.
+          title="Meeting created" // Hier setzen wir den Titel des Modals.
+          className="text-center"
+          handleClick={() => {
+            navigator.clipboard.writeText(meetingLink); // Hier kopieren wir den Meeting-Link in die Zwischenablage.
+            toast({ title: "Meeting link copied" }); // Hier zeigen wir eine Erfolgsmeldung an.
+          }} // Hier setzen wir die Funktion, die aufgerufen wird, wenn der Button geklickt wird.
+          image="/icons/checked.svg" // Hier setzen wir das Bild des Modals.
+          buttonIcon="/icons/copy.svg" // Hier setzen wir das Icon des Buttons.
+          buttonText="Copy Meeting Link" // Hier setzen wir den Titel des Buttons.
+        />
+      )}
+
       <MeetingModal
         isOpen={meetingState === "isInstantMeeting"} // Hier prüfen wir, ob der MeetingState auf "isInstantMeeting" gesetzt ist.
         onClose={() => setMeetingState(undefined)} // Hier setzen wir den MeetingState auf 'undefined', wenn das Modal geschlossen wird.
