@@ -7,7 +7,11 @@ import MeetingCard from "./MeetingCard";
 import Loader from "./Loader";
 import { useToast } from "./ui/use-toast";
 
-const CallList = ({ type }: { type: "ended | upcoming | recordings" }) => {
+interface CallListProps {
+  type: "ended" | "upcoming" | "recordings";
+}
+
+const CallList: React.FC<CallListProps> = ({ type }) => {
   // Hier holen wir uns die Calls von Stream. Das ist der Hook, den wir dafür geschrieben haben
   const { endedCalls, upcomingCalls, callRecordings, isLoading } =
     useGetCalls();
