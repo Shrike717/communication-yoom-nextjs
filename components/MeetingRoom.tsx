@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   CallControls,
@@ -31,7 +31,7 @@ const MeetingRoom = () => {
 
   // Die beiden!! wandeln den Wert in ein Boolean um: "personal" ist truthy wenn es existiert. Also ist !"personal" false und !!"personal" true.
   // Wenn es undefined ist: !undefined = true, !!undefined = false
-  const isPeronalRoom = !!searchParams.get("personal");
+  const isPersonalRoom = !!searchParams.get("personal");
 
   // Dieses State brauchen wir um die Layoutkomponente, die der User auswählt tracken zu können
   const [layout, setLayout] = useState<CallLayoutType>("speaker-left");
@@ -42,6 +42,9 @@ const MeetingRoom = () => {
   const { useCallCallingState } = useCallStateHooks();
   // Hier holen wir uns den Calling State
   const callingState = useCallCallingState();
+
+  // Mit dem Router können wir den User zurück zur Homepage leiten
+  const router = useRouter();
 
   // Mit dem callingState können wir herausfinden, ob der User dem Call beigetreten ist. Wenn nicht, zeigen wir einen Loader
   if (callingState !== CallingState.JOINED) return <Loader />;
@@ -92,7 +95,12 @@ const MeetingRoom = () => {
 
       {/* Hier werden die Kontrollelemente für den Video Stream angezeigt */}
       <div className="fixed bottom-0 flex w-full flex-wrap items-center justify-center gap-5">
-        <CallControls />
+        <CallControls
+          onLeave={() => {
+            // Nach Beendigung des Calls leiten wir den User zurück zur Homepage
+            router.push("/");
+          }}
+        />
 
         {/* Dropdown für Layouts */}
         <DropdownMenu>
@@ -131,7 +139,7 @@ const MeetingRoom = () => {
         </button>
 
         {/* Hier sitzt die Logik, um den and Call Button zu zeigen, falls der User der Meeting Owner ist und sich NICHT In einem Personal room befindet */}
-        {!isPeronalRoom && <EndCallButton />}
+        {!isPersonalRoom && <EndCallButton />}
       </div>
     </section>
   );
