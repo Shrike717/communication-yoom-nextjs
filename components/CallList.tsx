@@ -2,9 +2,10 @@
 import { useGetCalls } from "@/hooks/useGetCalls";
 import { Call, CallRecording } from "@stream-io/video-react-sdk";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MeetingCard from "./MeetingCard";
 import Loader from "./Loader";
+import { useToast } from "./ui/use-toast";
 
 const CallList = ({ type }: { type: "ended | upcoming | recordings" }) => {
   // Hier holen wir uns die Calls von Stream. Das ist der Hook, den wir dafür geschrieben haben
@@ -17,13 +18,16 @@ const CallList = ({ type }: { type: "ended | upcoming | recordings" }) => {
   // Wir müssen rausfinden, auf welcher Seite wir uns gerade befinden, um die richtigen Calls holen zu können. Dafür nutzen wir den Router.
   const router = useRouter();
 
+  // Gebrauch von Toasts, um Fehlermeldungen anzuzeigen
+  const { toast } = useToast();
+
   // Hier holen wir uns die Calls, die wir anzeigen wollen. Das hängt davon ab, ob wir auf der Upcoming, Ended oder Recordings Seite sind
   const getCalls = () => {
     switch (type) {
       case "ended":
-        return endedCalls;
+        return endedCalls.slice(0, 10); // Hier Habe ich die Anzahl der Previous Meeting auf zehn begrenzt. Sonst zu lange Liste
       case "recordings":
-        return callRecordings;
+        return recordings;
       case "upcoming":
         return upcomingCalls;
       default:
@@ -35,9 +39,9 @@ const CallList = ({ type }: { type: "ended | upcoming | recordings" }) => {
   const getNoCallsMessage = () => {
     switch (type) {
       case "ended":
-        return "No Previous Calls";
+        return "No Previous Meetings";
       case "upcoming":
-        return "No Upcoming Calls";
+        return "No Upcoming Meetings";
       case "recordings":
         return "No Recordings";
       default:
@@ -50,6 +54,32 @@ const CallList = ({ type }: { type: "ended | upcoming | recordings" }) => {
   // Hier holen wir uns die Nachricht, die wir anzeigen wollen, wenn es keine Calls gibt
   const noCallsMessage = getNoCallsMessage();
 
+  // Hier brauchen wir eine Logik, die uns die Recordings holt und extrahiert:
+  useEffect(() => {
+    const fetchRecordings = async () => {
+      try {
+        // Hier holen wir uns ALLE Recordings aus den Calls
+        const callData = await Promise.all(
+          callRecordings?.map((meeting) => meeting.queryRecordings()) ?? []
+        );
+
+        const recordings = callData // Hier holen wir uns die Recordings aus den Calls
+          .filter((call) => call.recordings.length > 0) // Hier filtern wir die Calls, die Recordings haben
+          .flatMap((call) => call.recordings); // flatMap ist eine Methode, die uns ein Array von Arrays in ein Array umwandelt
+
+        setRecordings(recordings); // Hier speichern wir die Recordings in den State
+      } catch (error) {
+        toast({
+          title: "Try again later", // Wenn man zu oft versucht, die Recordings zu laden, kommt dieser Fehler
+        });
+      }
+    };
+
+    if (type === "recordings") {
+      fetchRecordings(); // Hier rufen wir die Funktion auf, die uns die Recordings holt. Das passiert nur, wenn wir auf der Recordings Seite sind
+    }
+  }, [type, callRecordings]);
+
   // Hier setzen wir einen lauter, damit man am Anfang nicht ganz kurz no Meetings sieht.
   if (isLoading) return <Loader />;
 
@@ -58,7 +88,7 @@ const CallList = ({ type }: { type: "ended | upcoming | recordings" }) => {
       {calls && calls.length > 0 ? (
         calls.map((meeting: Call | CallRecording) => (
           <MeetingCard
-            key={(meeting as Call).id} // Hier holen wir uns die ID des Calls, um sie als Key zu verwenden
+            key={(meeting as Call).cid} // Hier holen wir uns die ID des Calls, um sie als Key zu verwenden
             icon={
               // Hier holen wir uns das Icon, das wir anzeigen wollen. Das hängt davon ab, ob es ein Call oder ein Recording ist
               type === "ended"
@@ -76,8 +106,30 @@ const CallList = ({ type }: { type: "ended | upcoming | recordings" }) => {
               "No Description"
             }
             date={
-              (meeting as Call).state?.startsAt?.toLocaleString() ||
-              (meeting as CallRecording).start_time?.toLocaleString()
+              (meeting as Call).state?.startsAt
+                ?.toLocaleString("en-US", {
+                  //   weekday: "short", // z.B. Montag
+                  year: "numeric",
+                  month: "2-digit", // Änderung zu 2-digit für Konsistenz
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  //   second: "2-digit",
+                  //   timeZoneName: "short", // z.B. MEZ
+                })
+                .replace(/\//g, ".") ||
+              new Date((meeting as CallRecording).start_time)
+                .toLocaleString("en-US", {
+                  //   weekday: "short", // z.B. Montag
+                  year: "numeric",
+                  month: "2-digit", // Änderung zu 2-digit für Konsistenz
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  //   second: "2-digit",
+                  //   timeZoneName: "short", // z.B. MEZ
+                })
+                .replace(/\//g, ".") // Ersetzt Schrägstriche durch Punkte
             }
             isPreviousMeeting={type === "ended"} // Hier setzen wir isPreviousMeeting auf true, wenn es ein Call ist. Dann bekommt die Card keine Buttons
             // link: Hier holen wir uns den Link, den wir anzeigen wollen. Das hängt davon ab, ob es ein Call oder ein Recording ist
@@ -92,7 +144,8 @@ const CallList = ({ type }: { type: "ended | upcoming | recordings" }) => {
             // Die handleClick schickt uns entweder zur Recording Seite, wenn es ein Recording ist, ansonsten zum Meeting Room, wenn wir in der Meeting Card auf Start klicken
             handleClick={
               type === "recordings"
-                ? () => router.push(`${(meeting as CallRecording).url}`) // Hier schicken wir uns zur Recording Seite, wenn es ein Recording ist
+                ? () =>
+                    window.open(`${(meeting as CallRecording).url}`, "_blank") // Hier öffnen wir das Recording in einem neuen Tab, wenn es ein Recording ist
                 : () => router.push(`/meeting/${(meeting as Call).id}`) // Hier schicken wir uns zum Meeting Room, wenn es ein Call ist
             }
           />
