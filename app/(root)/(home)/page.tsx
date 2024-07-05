@@ -36,7 +36,7 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/*  */}
+      {/* Das ist die Komponente, die uns die Cards auf der Homepage zeigt. */}
       <MeetingTypeList />
     </section>
   );

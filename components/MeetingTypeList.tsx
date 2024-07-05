@@ -8,6 +8,7 @@ import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
 
 import { useToast } from "@/components/ui/use-toast"; // Hier importieren wir den Toast-Hook.
 import { Textarea } from "./ui/textarea";
+import { Input } from "@/components/ui/input";
 
 import ReactDatePicker from "react-datepicker"; // Hier importieren wir den Datepicker.
 
@@ -134,7 +135,7 @@ const MeetingTypeList = () => {
         handleClick={() => router.push("/recordings")} // Leitet den Benutzer zur Seite '/recordings' weiter.
       />
 
-      {/* Hier sitzt das wiederverwertbare Modal */}
+      {/* Hier sitzt das wiederverwertbare Modals für Schedule Meeting */}
       {/* Wir prüfen jetzt, ob es schon callDetails gibt. Nur wenn nicht, erstellen wir ein neues Meeting. */}
       {!callDetails ? (
         <MeetingModal
@@ -188,6 +189,23 @@ const MeetingTypeList = () => {
         />
       )}
 
+      {/* Hier sitzt das wiederverwertbare Modals für Join Meeting */}
+      <MeetingModal
+        isOpen={meetingState === "isJoiningMeeting"}
+        onClose={() => setMeetingState(undefined)}
+        title="Type the link here"
+        className="text-center"
+        buttonText="Join Meeting"
+        handleClick={() => router.push(values.link)} // Hier leiten wir den Benutzer zur Meeting-Seite weiter.
+      >
+        <Input
+          placeholder="Meeting link"
+          onChange={(e) => setValues({ ...values, link: e.target.value })} // Hier setzen wir die Funktion, die aufgerufen wird, wenn der Link geändert wird. Wir setzen den Link auf den Wert des Inputs wenn deer User seinen Initation Link eingibt.
+          className="border-none bg-dark-3 focus-visible:ring-0 focus-visible:ring-offset-0"
+        />
+      </MeetingModal>
+
+      {/* Hier sitzt das wiederverwertbare Modals für Instant Meeting */}
       <MeetingModal
         isOpen={meetingState === "isInstantMeeting"} // Hier prüfen wir, ob der MeetingState auf "isInstantMeeting" gesetzt ist.
         onClose={() => setMeetingState(undefined)} // Hier setzen wir den MeetingState auf 'undefined', wenn das Modal geschlossen wird.
