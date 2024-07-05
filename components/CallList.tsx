@@ -80,7 +80,7 @@ const CallList = ({ type }: { type: "ended | upcoming | recordings" }) => {
     }
   }, [type, callRecordings]);
 
-  // Hier setzen wir einen lauter, damit man am Anfang nicht ganz kurz no Meetings sieht.
+  // Hier setzen wir einen Loader, damit man am Anfang nicht ganz kurz no Meetings sieht.
   if (isLoading) return <Loader />;
 
   return (
@@ -88,7 +88,7 @@ const CallList = ({ type }: { type: "ended | upcoming | recordings" }) => {
       {calls && calls.length > 0 ? (
         calls.map((meeting: Call | CallRecording) => (
           <MeetingCard
-            key={(meeting as Call).cid} // Hier holen wir uns die ID des Calls, um sie als Key zu verwenden
+            key={(meeting as Call).id} // Hier holen wir uns die ID des Calls, um sie als Key zu verwenden
             icon={
               // Hier holen wir uns das Icon, das wir anzeigen wollen. Das hängt davon ab, ob es ein Call oder ein Recording ist
               type === "ended"
