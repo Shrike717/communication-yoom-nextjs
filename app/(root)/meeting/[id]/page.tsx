@@ -1,5 +1,5 @@
 "use client";
-import { useUser } from "@clerk/nextjs";
+// import { useUser } from "@clerk/nextjs"; // Das haben wir erst mal nicht gebraucht
 import { StreamCall, StreamTheme } from "@stream-io/video-react-sdk";
 import React, { useState } from "react";
 
@@ -14,9 +14,9 @@ const Meeting = ({ params }: { params: { id: string } }) => {
   // Die ID wird aus den params geholt.
   const { id } = useParams();
 
-  // Zuerst brauchen wir unseren authentifizierten User. isLoaded zeigt an, ob der User bereits geladen wurde.
-  const { user, isLoaded } = useUser();
-  // Das tät brauchen wir, um tracken zu können ab der Audio und Video Setup des Fußes komplett ist oder nicht
+  // Zuerst brauchen wir unseren authentifizierten User. isLoaded zeigt an, ob der User bereits geladen wurde. ACHTUNG: Wurde erst mal nicht gebraucht.
+  //   const { user, isLoaded } = useUser();
+  // Das State brauchen wir, um tracken zu können ab der Audio und Video Setup des Users komplett ist oder nicht
   const [isSetupComplete, setIsSetupComplete] = useState(false);
 
   // Hier holen wir uns den Call und den Ladezustand des Calls aus unserem custom Hook. Die ID wird aus den params geholt.
@@ -43,5 +43,4 @@ const Meeting = ({ params }: { params: { id: string } }) => {
   );
 };
 
-// Exportiert die Meeting-Komponente als Standardmodul, damit sie in anderen Dateien verwendet werden kann.
 export default Meeting;

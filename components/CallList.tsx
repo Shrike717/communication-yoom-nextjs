@@ -78,6 +78,7 @@ const CallList = ({ type }: { type: "ended | upcoming | recordings" }) => {
     if (type === "recordings") {
       fetchRecordings(); // Hier rufen wir die Funktion auf, die uns die Recordings holt. Das passiert nur, wenn wir auf der Recordings Seite sind
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type, callRecordings]);
 
   // Hier setzen wir einen Loader, damit man am Anfang nicht ganz kurz no Meetings sieht.
