@@ -64,8 +64,10 @@ const MeetingTypeList = () => {
       if (!call) throw new Error("Failed to create call"); // Wenn der Call nicht erstellt werden konnte, werfen wir einen Error.
 
       // Wenn wir einen Call haben, brauchen wir zuerst die Zeit, zu welcher das Meeting gestartet wurde:
+      //   const startsAt =
+      //     values.dateTime.toISOString() || new Date(Date.now).toISOString(); // Hier holen wir uns die Startzeit des Meetings und formatieren sie in ein ISO-String. Wenn es keine gibt, nehmen wir die aktuelle Zeit.
       const startsAt =
-        values.dateTime.toISOString() || new Date(Date.now).toISOString(); // Hier holen wir uns die Startzeit des Meetings und formatieren sie in ein ISO-String. Wenn es keine gibt, nehmen wir die aktuelle Zeit.
+        values.dateTime.toISOString() || new Date(Date.now()).toISOString();
       // Dann holen wir uns die Beschreibung des Meetings:
       const description = values.description || "Instant meeting"; // Hier holen wir uns die Beschreibung des Meetings. Wenn es keine gibt, nehmen wir "Instant meeting".
 
