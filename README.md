@@ -1,36 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Yoom - Communication App
 
-## Getting Started
+Yoom is a Communication App designed for video conferencing. This Zoom clone  allows users to conduct video calls and communicate with each other. 
+The project was developed using a tutorial and utilizes modern web technologies for both frontend and backend development.
 
-First, run the development server:
+## Technologies Used
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Frontend
+- **Next14**: A React-based framework that supports server-side rendering and static site generation.
+- **TypeScript**: A statically typed programming language that builds on JavaScript, making it easier to develop and maintain large codebases.
+- **Tailwind**: A utility-first CSS framework that enables fast and efficient custom designs.
+- **ShadCn**: A specialized UI framework for designing and developing user interfaces.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Backend
+- **Clerk**: An authentication and user management tool that handles user management within the app.
+- **Stream**: An SDK for audio and video streaming. It allows the creation of WebSocket connections for communication with the Stream backend.  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## App Features
+- User management is handled by **Clerk**.
+- **Stream** enables audio and video streaming by creating a WebSocket connection that connects users to the Stream backend.  The client handles all interactions with the Stream backend server, including managing video calls and user logins.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Tutorial
+This project was created using the following tutorial from JS Mastery:  
+[YouTube Tutorial](https://www.youtube.com/watch?v=R8CIO1DZ2b8)
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Enjoy exploring and developing with Yoom!
