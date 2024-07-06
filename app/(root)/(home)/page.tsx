@@ -1,18 +1,19 @@
 import React from "react";
 import MeetingTypeList from "@/components/MeetingTypeList";
+import DateTimeDisplay from "@/components/DateTimeDisplay";
 
 const Home: React.FC = () => {
-  // Ermittelt die aktuelle Zeit
-  const now = new Date();
-  // Formatierung der Zeit in Stunden und Minuten, z.B. "02:00 PM"
-  const time = now.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  // Formatierung des Datums in vollständiger Form, z.B. "Thursday, December 31, 2020"
-  const date = new Intl.DateTimeFormat("en-US", {
-    dateStyle: "full",
-  }).format(now);
+  //   // Ermittelt die aktuelle Zeit
+  //   const now = new Date();
+  //   // Formatierung der Zeit in Stunden und Minuten, z.B. "02:00 PM"
+  //   const time = now.toLocaleTimeString("en-US", {
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //   });
+  //   // Formatierung des Datums in vollständiger Form, z.B. "Thursday, December 31, 2020"
+  //   const date = new Intl.DateTimeFormat("en-US", {
+  //     dateStyle: "full",
+  //   }).format(now);
 
   return (
     // Hauptsektion mit flexibler Anordnung, voller Höhe und Breite, vertikaler Ausrichtung und weißer Textfarbe
@@ -28,10 +29,24 @@ const Home: React.FC = () => {
 
           {/* Container für Uhrzeit und Datum, mit 2 Einheiten Abstand zwischen den Elementen */}
           <div className="flex flex-col gap-2">
-            {/* Große, fettgedruckte Uhrzeit, Schriftgröße 4xl für normale Ansicht und 7xl für lg Viewports */}
+            {/* Große, fettgedruckte Uhrzeit, Schriftgröße 4xl für normale Ansicht und 7xl für lg Viewports
             <h1 className="text-4xl font-extrabold lg:text-7xl">{time}</h1>
             {/* Datum in mittlerer Schriftgröße und spezieller Farbe, Schriftgröße lg für normale Ansicht und 2xl für lg Viewports */}
-            <p className="text-lg font-medium text-sky-1 lg:text-2xl">{date}</p>
+            {/* <p className="text-lg font-medium text-sky-1 lg:text-2xl">{date}</p>  */}
+            <DateTimeDisplay
+              dateFormat={{
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }}
+              timeFormat={{
+                hour: "2-digit",
+                minute: "2-digit",
+                // second: "2-digit",
+                hour12: false,
+              }}
+            />
           </div>
         </div>
       </div>
