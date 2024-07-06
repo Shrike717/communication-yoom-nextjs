@@ -33,7 +33,7 @@ const CallList: React.FC<CallListProps> = ({ type }) => {
       case "recordings":
         return recordings;
       case "upcoming":
-        return upcomingCalls;
+        return upcomingCalls.reverse();
       default:
         return [];
     }

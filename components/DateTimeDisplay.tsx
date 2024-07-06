@@ -16,7 +16,7 @@ const DateTimeDisplay: React.FC<DateTimeDisplayProps> = ({
   locale = "en-US", // Standardwert für die Spracheinstellung
   dateFormat = { dateStyle: "full" }, // Standardwert für das Datumformat
   timeFormat = { hour: "2-digit", minute: "2-digit", hour12: true }, // Standardwert für das Zeitformat
-  className = "", // Standardwert für die CSS-Klasse des übergeordneten Containers
+  className = "flex flex-col gap-2", // Standardwert für die CSS-Klasse des übergeordneten Containers
   timeClass = "text-4xl font-extrabold lg:text-7xl", // Standardwert für die CSS-Klasse der Zeitangabe
   dateClass = "text-lg font-medium text-sky-1 lg:text-2xl", // Standardwert für die CSS-Klasse der Datumsangabe
 }) => {
@@ -43,7 +43,7 @@ const DateTimeDisplay: React.FC<DateTimeDisplayProps> = ({
   }).format(now);
 
   return (
-    <div className={`flex flex-col gap-2 ${className}`}>
+    <div className={`${className}`}>
       <p className={timeClass}>{time}</p>
       <p className={dateClass}>{date}</p>
     </div>
